@@ -1,66 +1,47 @@
 import { questions } from "./questions.js";
 
-const container = document.getElementById("quiz-container");
+const form = document.getElementById("quiz-form");
 const result = document.getElementById("result");
-const nextBtn = document.getElementById("next-btn");
-const prevBtn = document.getElementById("prev-btn");
 const submitBtn = document.getElementById("submit-btn");
-
-let current = 0;
-const answers = [];
 
 questions.forEach((q, i) => {
   const div = document.createElement("div");
-  div.className = "question";
-  if (i === 0) div.classList.add("active");
+  div.classList.add("question");
   div.innerHTML = `
-    <label>
-      <input type="checkbox" id="q${i}" />
-      ${q.text}
-    </label>
+    <label for="q${i}">${q.text}</label>
+    <div class="slider-group">
+      <input type="range" id="q${i}" name="q${i}" min="1" max="5" value="3"/>
+      <span class="value-label" id="value${i}">3</span>
+    </div>
   `;
-  container.appendChild(div);
+  div.querySelector(`input[name="q${i}"]`).addEventListener("input", (e) => {
+    document.getElementById(`value${i}`).innerText = e.target.value;
+  });
+  form.appendChild(div);
 });
 
-function showQuestion(index) {
-  const all = document.querySelectorAll(".question");
-  all.forEach((el, i) => {
-    el.classList.toggle("active", i === index);
-  });
-  prevBtn.disabled = index === 0;
-  nextBtn.style.display = index === questions.length - 1 ? "none" : "inline-block";
-  submitBtn.style.display = index === questions.length - 1 ? "inline-block" : "none";
+function scaleToFuzzy(val) {
+  return (val - 1) / 4;
 }
 
-nextBtn.onclick = () => {
-  current++;
-  showQuestion(current);
-};
-
-prevBtn.onclick = () => {
-  current--;
-  showQuestion(current);
-};
-
-submitBtn.onclick = () => {
-  let ipa = 0;
-  let ips = 0;
+submitBtn.onclick = (e) => {
+  e.preventDefault();
+  let ipa = 0, ips = 0;
 
   questions.forEach((q, i) => {
-    const input = document.getElementById(`q${i}`);
-    if (input.checked) {
-      ipa += q.score.ipa;
-      ips += q.score.ips;
-    }
+    const input = document.querySelector(`input[name="q${i}"]`);
+    const fuzzyVal = scaleToFuzzy(parseInt(input.value));
+    ipa += fuzzyVal * q.score.ipa;
+    ips += fuzzyVal * q.score.ips;
   });
 
-  const jurusan = ipa === ips ? 
-    "Kamu cocok di IPA atau IPS, tergantung minat lanjutanmu!" :
-    `Kamu lebih cocok masuk jurusan ${ipa > ips ? "IPA" : "IPS"} (IPA: ${ipa} vs IPS: ${ips})`;
+  let text = "";
+  if (ipa === ips) {
+    text = `Kamu cocok di IPA atau IPS, tergantung minatmu!`;
+  } else {
+    const jurusan = ipa > ips ? "IPA" : "IPS";
+    text = `Kamu lebih cocok masuk jurusan <strong>${jurusan}</strong><br />(Skor IPA: ${ipa.toFixed(2)}, IPS: ${ips.toFixed(2)})`;
+  }
 
-  result.innerText = jurusan;
-  container.style.display = "none";
-  prevBtn.style.display = "none";
-  nextBtn.style.display = "none";
-  submitBtn.style.display = "none";
+  result.innerHTML = text;
 };
