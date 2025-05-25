@@ -1,80 +1,66 @@
 import { questions } from "./questions.js";
 
-const quizContainer = document.getElementById("quiz-container");
-const prevBtn = document.getElementById("prev-btn");
-const nextBtn = document.getElementById("next-btn");
-const submitBtn = document.getElementById("submit-btn");
+const container = document.getElementById("quiz-container");
 const result = document.getElementById("result");
+const nextBtn = document.getElementById("next-btn");
+const prevBtn = document.getElementById("prev-btn");
+const submitBtn = document.getElementById("submit-btn");
 
-let currentQuestion = 0;
-const answers = Array(questions.length).fill(null);
+let current = 0;
+const answers = [];
 
-function renderQuestion() {
-  const q = questions[currentQuestion];
-  quizContainer.innerHTML = `
-    <div class="question">
-      <p><strong>Pertanyaan ${currentQuestion + 1} dari ${questions.length}:</strong></p>
-      <p>${q.text}</p>
-      <label><input type="radio" name="answer" value="ya" ${answers[currentQuestion] === true ? "checked" : ""}/> Ya</label><br/>
-      <label><input type="radio" name="answer" value="tidak" ${answers[currentQuestion] === false ? "checked" : ""}/> Tidak</label>
-    </div>
+questions.forEach((q, i) => {
+  const div = document.createElement("div");
+  div.className = "question";
+  if (i === 0) div.classList.add("active");
+  div.innerHTML = `
+    <label>
+      <input type="checkbox" id="q${i}" />
+      ${q.text}
+    </label>
   `;
-
-  prevBtn.disabled = currentQuestion === 0;
-  nextBtn.style.display = currentQuestion === questions.length -1 ? "none" : "inline-block";
-  submitBtn.style.display = currentQuestion === questions.length -1 ? "inline-block" : "none";
-}
-
-function saveAnswer() {
-  const selected = document.querySelector('input[name="answer"]:checked');
-  if (!selected) return false;
-  answers[currentQuestion] = selected.value === "ya";
-  return true;
-}
-
-prevBtn.addEventListener("click", () => {
-  if (!saveAnswer()) {
-    alert("Silakan pilih jawaban terlebih dahulu.");
-    return;
-  }
-  if (currentQuestion > 0) {
-    currentQuestion--;
-    renderQuestion();
-  }
+  container.appendChild(div);
 });
 
-nextBtn.addEventListener("click", () => {
-  if (!saveAnswer()) {
-    alert("Silakan pilih jawaban terlebih dahulu.");
-    return;
-  }
-  if (currentQuestion < questions.length -1) {
-    currentQuestion++;
-    renderQuestion();
-  }
-});
+function showQuestion(index) {
+  const all = document.querySelectorAll(".question");
+  all.forEach((el, i) => {
+    el.classList.toggle("active", i === index);
+  });
+  prevBtn.disabled = index === 0;
+  nextBtn.style.display = index === questions.length - 1 ? "none" : "inline-block";
+  submitBtn.style.display = index === questions.length - 1 ? "inline-block" : "none";
+}
 
-submitBtn.addEventListener("click", () => {
-  if (!saveAnswer()) {
-    alert("Silakan pilih jawaban terlebih dahulu.");
-    return;
-  }
+nextBtn.onclick = () => {
+  current++;
+  showQuestion(current);
+};
 
+prevBtn.onclick = () => {
+  current--;
+  showQuestion(current);
+};
+
+submitBtn.onclick = () => {
   let ipa = 0;
   let ips = 0;
-  answers.forEach((ans, i) => {
-    if (ans) {
-      ipa += questions[i].score.ipa;
-      ips += questions[i].score.ips;
+
+  questions.forEach((q, i) => {
+    const input = document.getElementById(`q${i}`);
+    if (input.checked) {
+      ipa += q.score.ipa;
+      ips += q.score.ips;
     }
   });
 
-  if (ipa === ips) {
-    result.innerText = `Kamu cocok di IPA atau IPS, tergantung minat lanjutanmu!`;
-  } else {
-    const jurusan = ipa > ips ? "IPA" : "IPS";
-    result.innerText = `Kamu lebih cocok masuk jurusan ${jurusan} (IPA: ${ipa} vs IPS: ${ips})`;
-  }
-});
+  const jurusan = ipa === ips ? 
+    "Kamu cocok di IPA atau IPS, tergantung minat lanjutanmu!" :
+    `Kamu lebih cocok masuk jurusan ${ipa > ips ? "IPA" : "IPS"} (IPA: ${ipa} vs IPS: ${ips})`;
 
-renderQuestion();
+  result.innerText = jurusan;
+  container.style.display = "none";
+  prevBtn.style.display = "none";
+  nextBtn.style.display = "none";
+  submitBtn.style.display = "none";
+};

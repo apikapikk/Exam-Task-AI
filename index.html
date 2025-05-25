@@ -3,15 +3,17 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" href="./style.css">
 <title>Prediksi Jurusan SMP</title>
 </head>
 <body>
-
-<form id="quiz-form"></form>
-
-<button id="submit-btn">Submit</button>
-<p id="result"></p>
-
+ <div id="quiz-container"></div>
+ <div class="button-group">
+   <button id="prev-btn" disabled>Prev</button>
+   <button id="next-btn">Next</button>
+   <button id="submit-btn" style="display: none;">Submit</button>
+ </div>
+ <p id="result"></p> 
 <script type="module" src="./script.js"></script>
 </body>
 </html>
