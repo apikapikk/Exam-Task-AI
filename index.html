@@ -2,15 +2,19 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <title>Prediksi Jurusan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prediksi Jurusan IPA/IPS</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="container">
-    <h1>Prediksi Jurusan IPA atau IPS</h1>
-    <form id="quiz-form"></form>
-    <button id="submit-btn">Lihat Hasil</button>
-    <div id="result"></div>
+    <h1>Prediksi Jurusan IPA / IPS</h1>
+    <div id="question-card"></div>
+    <div class="buttons">
+      <button id="prev-btn" disabled>Sebelumnya</button>
+      <button id="next-btn">Berikutnya</button>
+    </div>
+    <div id="result" class="result"></div>
   </div>
 
   <script type="module" src="script.js"></script>

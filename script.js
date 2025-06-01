@@ -1,47 +1,84 @@
 import { questions } from "./questions.js";
 
-const form = document.getElementById("quiz-form");
-const result = document.getElementById("result");
-const submitBtn = document.getElementById("submit-btn");
+document.addEventListener("DOMContentLoaded", () => {
+  const card = document.getElementById("question-card");
+  const result = document.getElementById("result");
+  const nextBtn = document.getElementById("next-btn");
+  const prevBtn = document.getElementById("prev-btn");
 
-questions.forEach((q, i) => {
-  const div = document.createElement("div");
-  div.classList.add("question");
-  div.innerHTML = `
-    <label for="q${i}">${q.text}</label>
-    <div class="slider-group">
-      <input type="range" id="q${i}" name="q${i}" min="1" max="5" value="3"/>
-      <span class="value-label" id="value${i}">3</span>
-    </div>
-  `;
-  div.querySelector(`input[name="q${i}"]`).addEventListener("input", (e) => {
-    document.getElementById(`value${i}`).innerText = e.target.value;
-  });
-  form.appendChild(div);
-});
+  let currentQuestion = 0;
+  const answers = [];
 
-function scaleToFuzzy(val) {
-  return (val - 1) / 4;
-}
+  function renderQuestion(index) {
+    const q = questions[index];
+    card.innerHTML = `
+      <div class="question">
+        <p>${index + 1}. ${q.text}</p>
+        <div class="options">
+          <label><input type="radio" name="answer" value="1" /> Ya</label>
+          <label><input type="radio" name="answer" value="0" /> Tidak</label>
+        </div>
+      </div>
+    `;
 
-submitBtn.onclick = (e) => {
-  e.preventDefault();
-  let ipa = 0, ips = 0;
-
-  questions.forEach((q, i) => {
-    const input = document.querySelector(`input[name="q${i}"]`);
-    const fuzzyVal = scaleToFuzzy(parseInt(input.value));
-    ipa += fuzzyVal * q.score.ipa;
-    ips += fuzzyVal * q.score.ips;
-  });
-
-  let text = "";
-  if (ipa === ips) {
-    text = `Kamu cocok di IPA atau IPS, tergantung minatmu!`;
-  } else {
-    const jurusan = ipa > ips ? "IPA" : "IPS";
-    text = `Kamu lebih cocok masuk jurusan <strong>${jurusan}</strong><br />(Skor IPA: ${ipa.toFixed(2)}, IPS: ${ips.toFixed(2)})`;
+    // Pre-select if already answered
+    if (answers[index] !== undefined) {
+      const inputs = document.getElementsByName("answer");
+      inputs.forEach((input) => {
+        if (input.value == answers[index]) input.checked = true;
+      });
+    }
   }
 
-  result.innerHTML = text;
-};
+  function calculateResult() {
+    let ipa = 0;
+    let ips = 0;
+
+    answers.forEach((ans, i) => {
+      const val = parseInt(ans);
+      const weight = val; // 1 jika Ya, 0 jika Tidak
+      ipa += weight * questions[i].score.ipa;
+      ips += weight * questions[i].score.ips;
+    });
+
+    let final = "";
+    if (ipa === ips) {
+      final = `Kamu cocok di IPA atau IPS, tergantung minatmu!`;
+    } else {
+      const jurusan = ipa > ips ? "IPA" : "IPS";
+      final = `Kamu lebih cocok masuk jurusan <strong>${jurusan}</strong><br />(Skor IPA: ${ipa.toFixed(2)}, IPS: ${ips.toFixed(2)})`;
+    }
+
+    card.style.display = "none";
+    nextBtn.style.display = "none";
+    prevBtn.style.display = "none";
+    result.innerHTML = final;
+  }
+
+  renderQuestion(currentQuestion);
+
+  nextBtn.onclick = () => {
+    const selected = document.querySelector("input[name='answer']:checked");
+    if (!selected) return alert("Pilih jawaban terlebih dahulu!");
+
+    answers[currentQuestion] = selected.value;
+
+    if (currentQuestion < questions.length - 1) {
+      currentQuestion++;
+      renderQuestion(currentQuestion);
+      prevBtn.disabled = false;
+    } else {
+      calculateResult();
+    }
+  };
+
+  prevBtn.onclick = () => {
+    if (currentQuestion > 0) {
+      currentQuestion--;
+      renderQuestion(currentQuestion);
+      nextBtn.innerText = "Berikutnya";
+    }
+
+    if (currentQuestion === 0) prevBtn.disabled = true;
+  };
+});
