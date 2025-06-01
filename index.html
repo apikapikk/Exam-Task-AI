@@ -2,20 +2,28 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Prediksi Jurusan IPA/IPS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quiz Fuzzy Logic</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Prediksi Jurusan IPA / IPS</h1>
-    <div id="question-card"></div>
-    <div class="buttons">
-      <button id="prev-btn" disabled>Sebelumnya</button>
-      <button id="next-btn">Berikutnya</button>
+  <main>
+    <h1>Quiz Pemilihan Jurusan</h1>
+    <form id="quiz-form"></form>
+
+    <div class="progress-container">
+      <div id="progress-bar"></div>
     </div>
-    <div id="result" class="result"></div>
-  </div>
+
+    <div class="navigation">
+      <button id="prev-btn" disabled>Previous</button>
+      <button id="next-btn">Next</button>
+      <button id="submit-btn" style="display:none;">Submit</button>
+    </div>
+
+    <div id="result"></div>
+  </main>
 
   <script type="module" src="script.js"></script>
 </body>

@@ -1,71 +1,125 @@
-body {
- font-family: "Segoe UI", sans-serif;
- background: #f5f6fa;
- margin: 0;
- padding: 0;
-}
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans&display=swap');
 
-.container {
- max-width: 600px;
- margin: 50px auto;
- padding: 30px;
- background: white;
- border-radius: 12px;
- box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: #fff;
+  color: #222;
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 1rem;
 }
 
 h1 {
- text-align: center;
- color: #2f3640;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
 }
 
-.question p {
- font-size: 1.2em;
- margin-bottom: 15px;
+.question-card {
+  border: 2px solid #222;
+  border-radius: 10px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  background: #f9f9f9;
+  box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
 }
 
-.options {
+.question-card p {
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.question-card label {
+  display: block;
+  margin-bottom: 0.8rem;
+  cursor: pointer;
+  user-select: none;
+  font-size: 1rem;
+}
+
+input[type="radio"] {
+  margin-right: 0.7rem;
+  accent-color: #222;
+  cursor: pointer;
+}
+
+.navigation {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.navigation button {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: #222;
+  color: white;
+  border: none;
+  padding: 0.7rem 1.6rem;
+  margin: 0 0.5rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+}
+
+.navigation button:disabled {
+  background: #888;
+  cursor: not-allowed;
+}
+
+.navigation button:hover:not(:disabled) {
+  background: #555;
+}
+
+#result {
+  font-weight: 700;
+  text-align: center;
+  font-size: 1.2rem;
+  min-height: 2rem;
+}
+
+.progress-container {
+  width: 100%;
+  background-color: #ddd;
+  border-radius: 8px;
+  height: 10px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+}
+
+#progress-bar {
+  height: 100%;
+  width: 0%;
+  background-color: #222;
+  transition: width 0.3s ease;
+  border-radius: 8px;
+}
+
+.result-cards {
  display: flex;
- flex-direction: column;
- gap: 10px;
+ gap: 1rem;
+ justify-content: center;
+ margin-top: 1rem;
 }
 
-label {
- font-size: 1em;
- cursor: pointer;
-}
-
-.buttons {
- display: flex;
- justify-content: space-between;
- margin-top: 30px;
-}
-
-button {
- padding: 10px 20px;
- border: none;
- background: #0984e3;
- color: white;
- font-size: 1em;
- border-radius: 8px;
- cursor: pointer;
- transition: 0.3s;
-}
-
-button:disabled {
- background: #b2bec3;
- cursor: not-allowed;
-}
-
-button:hover:not(:disabled) {
- background: #74b9ff;
-}
-
-.result {
- margin-top: 30px;
- padding: 20px;
- background: #dfe6e9;
- border-radius: 8px;
- font-size: 1.1em;
+.card {
+ border: 2px solid #222;
+ padding: 1rem 1.5rem;
+ border-radius: 10px;
+ width: 120px;
  text-align: center;
+ background: #f4f4f4;
+ box-shadow: 0 0 8px rgb(0 0 0 / 0.1);
+ font-weight: 700;
+ font-size: 1.2rem;
+}
+
+.ipa-card {
+ border-color: #0066cc;
+ color: #004a99;
+}
+
+.ips-card {
+ border-color: #cc6600;
+ color: #994d00;
 }
