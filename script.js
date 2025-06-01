@@ -133,28 +133,22 @@ submitBtn.onclick = (e) => {
   const ulangiBtn = document.createElement("button");
   ulangiBtn.textContent = "Ulangi Quiz";
   ulangiBtn.id = "ulangi-btn";
-  ulangiBtn.style.marginTop = "1rem";
-  ulangiBtn.style.padding = "0.7rem 1.5rem";
-  ulangiBtn.style.fontWeight = "600";
-  ulangiBtn.style.cursor = "pointer";
-  ulangiBtn.style.border = "none";
-  ulangiBtn.style.backgroundColor = "#222";
-  ulangiBtn.style.color = "#fff";
-  ulangiBtn.style.borderRadius = "6px";
+  ulangiBtn.className = "btn-ulangi"; // tambahkan class saja
 
   ulangiBtn.onclick = () => {
-    quizFinished = false;
-    currentQuestionIndex = 0;
-    localStorage.clear();
-    result.innerHTML = "";
-    form.innerHTML = "";
-    renderQuestion(currentQuestionIndex);
-    prevBtn.disabled = true;
-    nextBtn.style.display = "inline-block";
-    submitBtn.style.display = "none";
-    ulangiBtn.remove();
-    progressBar.style.width = "0%";
-  };
+  quizFinished = false;
+  currentQuestionIndex = 0;
+  localStorage.clear();
+  result.innerHTML = "";
+  form.innerHTML = "";
+  renderQuestion(currentQuestionIndex);
+  prevBtn.disabled = true;
+  nextBtn.style.display = "inline-block";
+  submitBtn.style.display = "none";
+  ulangiBtn.remove();
+  progressBar.style.width = "0%";
+};
+
 
   result.appendChild(ulangiBtn);
 };

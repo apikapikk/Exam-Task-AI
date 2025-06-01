@@ -123,3 +123,19 @@ input[type="radio"] {
  border-color: #cc6600;
  color: #994d00;
 }
+
+.btn-ulangi {
+ margin-top: 1rem;
+ padding: 0.7rem 1.5rem;
+ font-weight: 600;
+ cursor: pointer;
+ border: none;
+ background-color: #222;
+ color: #fff;
+ border-radius: 6px;
+ transition: background-color 0.3s;
+}
+
+.btn-ulangi:hover {
+ background-color: #444;
+}
